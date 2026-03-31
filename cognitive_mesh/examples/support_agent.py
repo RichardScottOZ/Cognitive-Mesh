@@ -226,9 +226,9 @@ class SupportAgent(CognitiveAgent):
         """Suggest recommended actions based on customer data."""
         recs: list[str] = []
         if customer_data.get("urgency", 0) > 0.7:
-            recs.append("prioritise_response")
+            recs.append("prioritize_response")
         if customer_data.get("sentiment", 1) < 0.4:
-            recs.append("empathise_first")
+            recs.append("empathize_first")
         if not recs:
             recs.append("standard_response")
         return recs
