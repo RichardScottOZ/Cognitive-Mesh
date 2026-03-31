@@ -6,7 +6,7 @@ agent architecture with the
 [OODA (Observe-Orient-Decide-Act)](https://en.wikipedia.org/wiki/OODA_loop)
 loop for building production-ready AI agents.
 
-Based on the article: [Real-World Implementation of Cognitive Architectures for AI Agents](https://www.loonix.pt/articles/bdi-ooda-production.html)
+Based on the article: [Real-World Implementation of Cognitive Architectures for AI Agents](https://www.loonix.pt/articles/bdi-ooda-production.html) by **[loonix](https://www.loonix.pt)**
 
 ## Architecture
 
@@ -105,3 +105,7 @@ python -m pytest tests/ -v
 - **Intentions** – Committed plans to satisfy desires
 - **OODA Cycle** – Observe → Orient → Decide → Act loop for rapid response
 - **Memory** – Short-term (with TTL), long-term (with importance pruning), and working memory
+
+## Credits
+
+This project is based on the article **[Real-World Implementation of Cognitive Architectures for AI Agents](https://www.loonix.pt/articles/bdi-ooda-production.html)** by **[loonix](https://www.loonix.pt)**. Many thanks for the original concepts and inspiration.
