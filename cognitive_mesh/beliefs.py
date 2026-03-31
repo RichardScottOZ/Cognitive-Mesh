@@ -103,6 +103,32 @@ class BeliefSystem:
         """Remove and return a belief, or ``None`` if not found."""
         return self._beliefs.pop(key, None)
 
+    def apply_evidence(
+        self,
+        key: str,
+        evidence: float,
+        is_consistent: bool,
+    ) -> Belief | None:
+        """Adjust the confidence of an existing belief without changing its value."""
+        existing = self._beliefs.get(key)
+        if existing is None:
+            return None
+
+        now = time.time()
+        new_confidence = self.bayesian_update(
+            existing.confidence, evidence, is_consistent
+        )
+        existing.confidence = new_confidence
+        existing.last_update = now
+        existing.history.append(
+            BeliefRecord(
+                value=existing.value,
+                confidence=new_confidence,
+                timestamp=now,
+            )
+        )
+        return existing
+
     # ------------------------------------------------------------------
     # Queries
     # ------------------------------------------------------------------

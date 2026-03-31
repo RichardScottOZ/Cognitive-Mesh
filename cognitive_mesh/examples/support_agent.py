@@ -125,7 +125,14 @@ class SupportAgent(CognitiveAgent):
                 ],
             )
 
-        return await super().decide(orientation)
+        return Plan(
+            goal="resolve_customer_issue",
+            steps=[
+                PlanStep(action="acknowledge_issue"),
+                PlanStep(action="investigate_problem"),
+                PlanStep(action="provide_solution"),
+            ],
+        )
 
     async def act(self, plan: Plan) -> CycleResult:
         results: list[ActionResult] = []

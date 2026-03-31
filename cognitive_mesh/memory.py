@@ -62,6 +62,13 @@ class ShortTermMemory:
         self._evict_expired()
         return list(reversed(self._records[-n:]))
 
+    def extract(self, min_importance: float = 0.0) -> list[MemoryRecord]:
+        """Remove and return non-expired records with importance above the threshold."""
+        self._evict_expired()
+        matching = [r for r in self._records if r.importance >= min_importance]
+        self._records = [r for r in self._records if r.importance < min_importance]
+        return matching
+
     def clear(self) -> None:
         self._records.clear()
 
@@ -185,7 +192,7 @@ class MemorySystem:
 
         Returns the number of records consolidated.
         """
-        records = [r for r in self.short._records if r.importance >= min_importance]
+        records = self.short.extract(min_importance=min_importance)
         for r in records:
             self.long.store(
                 key=r.key, value=r.value, importance=r.importance, metadata=r.metadata
