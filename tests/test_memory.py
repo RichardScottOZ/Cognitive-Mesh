@@ -141,7 +141,7 @@ class TestMemorySystem:
         ms = MemorySystem(short_term_ttl=0.01)
         ms.short.store("important", "data", importance=0.8)
 
-        time.sleep(0.02)
+        time.sleep(0.05)
 
         count = ms.consolidate(min_importance=0.5)
         assert count == 0

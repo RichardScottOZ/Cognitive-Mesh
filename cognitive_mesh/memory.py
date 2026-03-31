@@ -65,8 +65,14 @@ class ShortTermMemory:
     def extract(self, min_importance: float = 0.0) -> list[MemoryRecord]:
         """Remove and return non-expired records with importance above the threshold."""
         self._evict_expired()
-        matching = [r for r in self._records if r.importance >= min_importance]
-        self._records = [r for r in self._records if r.importance < min_importance]
+        matching: list[MemoryRecord] = []
+        remaining: list[MemoryRecord] = []
+        for record in self._records:
+            if record.importance >= min_importance:
+                matching.append(record)
+            else:
+                remaining.append(record)
+        self._records = remaining
         return matching
 
     def clear(self) -> None:
