@@ -73,6 +73,16 @@ class TestCognitiveAgent:
         agent.weaken_belief("test")
         belief = agent.beliefs.query("test")
         assert belief is not None
+        assert belief.value is True
+        assert belief.confidence < 0.8
+
+    def test_weaken_non_boolean_belief_preserves_value(self) -> None:
+        agent = CognitiveAgent()
+        agent.beliefs.update("status", "active", confidence=0.8)
+        agent.weaken_belief("status")
+        belief = agent.beliefs.query("status")
+        assert belief is not None
+        assert belief.value == "active"
         assert belief.confidence < 0.8
 
     @pytest.mark.asyncio
@@ -135,6 +145,12 @@ class TestSupportAgent:
         })
         result = await agent.cycle()
         assert isinstance(result, CycleResult)
+        assert result.plan.goal == "resolve_customer_issue"
+        assert [step.action for step in result.plan.steps] == [
+            "acknowledge_issue",
+            "investigate_problem",
+            "provide_solution",
+        ]
 
     def test_analyse_sentiment(self) -> None:
         assert SupportAgent.analyse_sentiment("This is great, thanks!") > 0.5

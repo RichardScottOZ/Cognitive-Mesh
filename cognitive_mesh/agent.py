@@ -209,19 +209,12 @@ class CognitiveAgent:
 
     def strengthen_belief(self, key: str, amount: float = 0.1) -> None:
         """Increase confidence in an existing belief."""
-        belief = self.beliefs.query(key)
-        if belief is not None:
-            self.beliefs.update(key, belief.value, confidence=amount)
+        self.beliefs.apply_evidence(key, amount, is_consistent=True)
 
     def weaken_belief(self, key: str, amount: float = 0.3) -> None:
         """Decrease confidence in an existing belief by providing
         contradictory evidence."""
-        belief = self.beliefs.query(key)
-        if belief is not None:
-            # Supply the *opposite* value so bayesian_update treats it as
-            # inconsistent evidence.
-            opposite = not belief.value if isinstance(belief.value, bool) else None
-            self.beliefs.update(key, opposite, confidence=amount)
+        self.beliefs.apply_evidence(key, amount, is_consistent=False)
 
     # ------------------------------------------------------------------
     # Default helper implementations (override for domain-specific logic)

@@ -123,6 +123,29 @@ class TestMemorySystem:
         count = ms.consolidate(min_importance=0.5)
         assert count == 1
         assert len(ms.long) == 1
+        assert len(ms.short) == 1
+
+    def test_consolidate_is_idempotent_after_move(self) -> None:
+        ms = MemorySystem()
+        ms.short.store("important", "data", importance=0.8)
+
+        first = ms.consolidate(min_importance=0.5)
+        second = ms.consolidate(min_importance=0.5)
+
+        assert first == 1
+        assert second == 0
+        assert len(ms.long) == 1
+        assert len(ms.short) == 0
+
+    def test_consolidate_skips_expired_short_term_records(self) -> None:
+        ms = MemorySystem(short_term_ttl=0.01)
+        ms.short.store("important", "data", importance=0.8)
+
+        time.sleep(0.05)
+
+        count = ms.consolidate(min_importance=0.5)
+        assert count == 0
+        assert len(ms.long) == 0
 
     def test_clear_all(self) -> None:
         ms = MemorySystem()
